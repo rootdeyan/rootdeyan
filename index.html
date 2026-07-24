@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rootdeyan — Projects</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2312131a'/%3E%3Ctext x='12' y='17' font-family='monospace' font-size='14' fill='%235eead4' text-anchor='middle'%3E%3E_%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --bg:#0e0f13;
+    --bg-soft:#14151b;
+    --card:#181a22;
+    --card-hover:#1e2029;
+    --border:#262835;
+    --border-hover:#343747;
+    --text:#e7e8ee;
+    --text-dim:#9497ab;
+    --text-faint:#5c5f70;
+    --accent:#5eead4;
+    --accent-dim:rgba(94,234,212,0.1);
+    --accent-line:rgba(94,234,212,0.28);
+    --amber:#f2b872;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(94,234,212,0.05), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 20%, rgba(242,184,114,0.035), transparent 55%);
+    background-attachment:fixed;
+  }
+
+  /* ── noise / grid texture ── */
+  .grid-veil{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.35;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(ellipse 90% 70% at 50% 0%, black 0%, transparent 75%);
+  }
+
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
+
+  /* ── header ── */
+  header{padding:64px 0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;background:var(--accent-dim);
+    border:1px solid var(--accent-line);display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:14px;font-weight:500;
+  }
+  .brand-name{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--text-dim);letter-spacing:.02em}
+  .brand-name b{color:var(--text);font-weight:500}
+  .header-links{display:flex;gap:10px}
+  .icon-link{
+    width:38px;height:38px;border-radius:10px;border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;color:var(--text-dim);
+    text-decoration:none;transition:all .2s ease;font-size:15px;
+  }
+  .icon-link:hover{border-color:var(--accent-line);color:var(--accent);background:var(--accent-dim);transform:translateY(-2px)}
+
+  /* ── hero ── */
+  .hero{padding:56px 0 72px;opacity:0;transform:translateY(14px);animation:rise .7s ease forwards}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--accent);
+    display:inline-flex;align-items:center;gap:9px;padding:6px 12px 6px 10px;
+    border:1px solid var(--accent-line);border-radius:100px;background:var(--accent-dim);margin-bottom:26px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s ease-in-out infinite}
+  h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:clamp(34px,5vw,58px);line-height:1.08;letter-spacing:-0.02em;color:var(--text);max-width:780px;
+  }
+  h1 span{color:var(--text-faint)}
+  .lede{margin-top:22px;max-width:560px;font-size:16px;line-height:1.7;color:var(--text-dim)}
+  .stats{display:flex;gap:36px;margin-top:40px;flex-wrap:wrap}
+  .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:600;color:var(--text)}
+  .stat span{font-size:12.5px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;letter-spacing:.03em}
+
+  /* ── filter bar ── */
+  .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:34px;opacity:0;animation:rise .7s ease .1s forwards}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 14px;border-radius:100px;
+    border:1px solid var(--border);color:var(--text-dim);background:var(--card);cursor:pointer;
+    transition:all .18s ease;user-select:none;
+  }
+  .chip:hover{border-color:var(--border-hover);color:var(--text)}
+  .chip.active{border-color:var(--accent-line);color:var(--accent);background:var(--accent-dim)}
+
+  /* ── grid ── */
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding-bottom:90px;
+  }
+  .card{
+    position:relative;background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:24px 22px 20px;display:flex;flex-direction:column;gap:14px;
+    transition:transform .28s cubic-bezier(.2,.8,.2,1), border-color .28s ease, background .28s ease, box-shadow .28s ease;
+    opacity:0;transform:translateY(16px);
+  }
+  .card.in{animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards}
+  .card:hover{
+    transform:translateY(-4px);border-color:var(--border-hover);background:var(--card-hover);
+    box-shadow:0 20px 40px -20px rgba(0,0,0,.55);
+  }
+  .card::before{
+    content:'';position:absolute;inset:0;border-radius:16px;padding:1px;
+    background:linear-gradient(135deg,var(--card-accent,transparent),transparent 45%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s ease;pointer-events:none;
+  }
+  .card:hover::before{opacity:.55}
+
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .card-icon{
+    width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    background:var(--icon-bg,var(--accent-dim));border:1px solid var(--icon-line,var(--accent-line));
+    color:var(--icon-color,var(--accent));font-size:16px;flex-shrink:0;transition:transform .28s ease;
+  }
+  .card:hover .card-icon{transform:scale(1.08) rotate(-3deg)}
+  .lang-tag{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-faint);
+    border:1px solid var(--border);padding:4px 9px;border-radius:100px;white-space:nowrap;margin-top:2px;
+  }
+  .card h3{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+  .card p{font-size:13.5px;line-height:1.6;color:var(--text-dim);flex:1}
+  .card-actions{display:flex;gap:8px;margin-top:4px}
+  .btn{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+    font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;padding:9px 10px;border-radius:9px;
+    text-decoration:none;transition:all .18s ease;border:1px solid transparent;
+  }
+  .btn-primary{background:var(--text);color:#0e0f13}
+  .btn-primary:hover{background:var(--accent);color:#0e0f13}
+  .btn-ghost{border-color:var(--border);color:var(--text-dim)}
+  .btn-ghost:hover{border-color:var(--border-hover);color:var(--text);background:rgba(255,255,255,.02)}
+  .btn i{font-size:11px}
+
+  .badge-nolive{
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);
+    display:flex;align-items:center;gap:5px;
+  }
+
+  footer{
+    border-top:1px solid var(--border);padding:34px 0 60px;display:flex;justify-content:space-between;
+    flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;
+  }
+  footer a{color:var(--text-dim);text-decoration:none;transition:color .18s ease}
+  footer a:hover{color:var(--accent)}
+
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001s !important; transition-duration:.001s !important}
+  }
+
+  @media(max-width:640px){
+    header{padding-top:44px}
+    .hero{padding:36px 0 48px}
+    .stats{gap:24px}
+  }
+</style>
+</head>
+<body>
+<div class="grid-veil"></div>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark">&gt;_</div>
+      <div class="brand-name"><b>rootdeyan</b> / projects</div>
+    </div>
+    <div class="header-links">
+      <a class="icon-link" href="https://github.com/rootdeyan" target="_blank" rel="noopener" title="GitHub profile"><i class="fa-brands fa-github"></i></a>
+      <a class="icon-link" href="mailto:rootdeyan@outlook.com" title="Email"><i class="fa-regular fa-envelope"></i></a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span> 13 repositories · all live</div>
+    <h1>One page for every tool<br><span>I've built and scattered across GitHub.</span></h1>
+    <p class="lede">Small, single-purpose web utilities — trackers, converters, generators — each one a self-contained <span style="color:var(--text)">index.html</span>, no backend, no sign-up. Pick one below.</p>
+    <div class="stats">
+      <div class="stat"><b>13</b><span>REPOSITORIES</span></div>
+      <div class="stat"><b>11</b><span>LIVE DEMOS</span></div>
+      <div class="stat"><b>100%</b><span>CLIENT-SIDE</span></div>
+    </div>
+  </section>
+
+  <div class="filter-bar" id="filterBar"></div>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <span>Built for quick access to <b style="color:var(--text-dim)">rootdeyan</b>'s repos.</span>
+    <span>Sofia, Bulgaria</span>
+  </footer>
+
+</div>
+
+<script>
+const PROJECTS = [
+  {
+    name:"WiFi QR Generator",
+    repo:"Gen-QR-WiFi",
+    live:"https://rootdeyan.github.io/Gen-QR-WiFi/",
+    desc:"Turns a network name and password into a scannable, style‑able WiFi QR code — guests connect by camera, no typing. Custom dot/corner shapes, colours, printable labels.",
+    icon:"fa-wifi", lang:"HTML", tag:"utility",
+    color:"#5eead4"
+  },
+  {
+    name:"myBalance",
+    repo:"myBalance",
+    live:"https://rootdeyan.github.io/myBalance/",
+    desc:"A private salary & expense tracker with automatic EUR/BGN conversion and monthly balance carry‑over. Everything stays in the browser — nothing is uploaded.",
+    icon:"fa-wallet", lang:"HTML", tag:"finance",
+    color:"#f2b872"
+  },
+  {
+    name:"Free Watermark",
+    repo:"Watermark",
+    live:"https://rootdeyan.github.io/Watermark/",
+    desc:"Bulk‑watermarks images (JPG, PNG, WebP…) entirely on‑device — adjustable text, angle, density, opacity and colour, then batch‑download the results.",
+    icon:"fa-stamp", lang:"HTML", tag:"images",
+    color:"#c8f04a"
+  },
+  {
+    name:"Aurum Calculator",
+    repo:"iCalculator",
+    live:"https://rootdeyan.github.io/iCalculator/",
+    desc:"A gold‑and‑glass themed calculator with a running expression display, light/dark toggle and satisfying tactile button feedback.",
+    icon:"fa-calculator", lang:"HTML", tag:"utility",
+    color:"#c8a96e"
+  },
+  {
+    name:"MyNotes",
+    repo:"MyNotes",
+    live:"https://rootdeyan.github.io/MyNotes/",
+    desc:"A distraction‑free rich‑text notes app — headings, checklists, highlighting, search and autosave, all kept locally in the browser.",
+    icon:"fa-note-sticky", lang:"HTML", tag:"productivity",
+    color:"#7c6cff"
+  },
+  {
+    name:"SkyTrace",
+    repo:"Flight-Tracker",
+    live:"https://rootdeyan.github.io/Flight-Tracker/",
+    desc:"A live flight tracker interface for looking up and following flights in real time.",
+    icon:"fa-plane", lang:"HTML", tag:"tracker",
+    color:"#60a5fa"
+  },
+  {
+    name:"Shopping List",
+    repo:"Shopping",
+    live:"https://rootdeyan.github.io/Shopping/",
+    desc:"A no‑frills shopping list you can check items off as you go — quick to open, quick to use.",
+    icon:"fa-cart-shopping", lang:"HTML", tag:"productivity",
+    color:"#34d399"
+  },
+  {
+    name:"modCounter",
+    repo:"modCounter",
+    live:"https://rootdeyan.github.io/modCounter/",
+    desc:"A personal work‑performance dashboard — tracks daily task counts across categories, converts them to points against bonus targets, plus break timers and a Sofia weather widget.",
+    icon:"fa-gauge-high", lang:"HTML", tag:"work",
+    color:"#f59e0b"
+  },
+  {
+    name:"trCounter",
+    repo:"trCounter",
+    live:"https://rootdeyan.github.io/trCounter/",
+    desc:"An earlier counter tool that now redirects to its actively hosted successor on a custom domain.",
+    icon:"fa-hashtag", lang:"HTML", tag:"work",
+    color:"#f59e0b"
+  },
+  {
+    name:"Random Name Picker",
+    repo:"RandomPicker",
+    live:"https://rootdeyan.github.io/RandomPicker/",
+    desc:"Type in a list of names, hit go, and watch it spin down to a random winner — with a running winners log saved between visits.",
+    icon:"fa-shuffle", lang:"HTML", tag:"utility",
+    color:"#fb7185"
+  },
+  {
+    name:"TSV ⇄ XLSX Converter",
+    repo:"fileConverter",
+    live:"https://rootdeyan.github.io/fileConverter/",
+    desc:"Converts spreadsheet files between .tsv and .xlsx directly in the browser — nothing leaves your machine.",
+    icon:"fa-file-export", lang:"HTML", tag:"utility",
+    color:"#25e2cc"
+  },
+  {
+    name:"Cooldown Timer",
+    repo:"Cooldown-timer-v.1.2",
+    live:null,
+    desc:"A minimal countdown‑timer widget with a live time‑left readout and progress line.",
+    icon:"fa-hourglass-half", lang:"JavaScript", tag:"utility",
+    color:"#38bdf8"
+  },
+  {
+    name:"Loading Animations",
+    repo:"Loading-animations",
+    live:null,
+    desc:"A small collection of CSS loading/progress indicator animations — a circular progress ring component.",
+    icon:"fa-spinner", lang:"CSS", tag:"components",
+    color:"#a78bfa"
+  }
+];
+
+const grid = document.getElementById('grid');
+const filterBar = document.getElementById('filterBar');
+const tags = ['all', ...new Set(PROJECTS.map(p=>p.tag))];
+
+filterBar.innerHTML = tags.map((t,i)=>
+  `<button class="chip ${i===0?'active':''}" data-tag="${t}">${t}</button>`
+).join('');
+
+function cardHTML(p){
+  const liveBtn = p.live
+    ? `<a class="btn btn-primary" href="${p.live}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i>Live demo</a>`
+    : `<span class="btn btn-ghost badge-nolive" style="flex:1;justify-content:center"><i class="fa-regular fa-circle-question"></i>No live demo</span>`;
+  return `
+  <div class="card" style="--card-accent:${p.color}22" data-tag="${p.tag}">
+    <div class="card-top">
+      <div class="card-icon" style="--icon-bg:${p.color}1a;--icon-line:${p.color}40;--icon-color:${p.color}">
+        <i class="fa-solid ${p.icon}"></i>
+      </div>
+      <span class="lang-tag">${p.lang}</span>
+    </div>
+    <h3>${p.name}</h3>
+    <p>${p.desc}</p>
+    <div class="card-actions">
+      ${liveBtn}
+      <a class="btn btn-ghost" href="https://github.com/rootdeyan/${p.repo}" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i>Source</a>
+    </div>
+  </div>`;
+}
+
+function render(filter='all'){
+  const list = filter==='all' ? PROJECTS : PROJECTS.filter(p=>p.tag===filter);
+  grid.innerHTML = list.map(cardHTML).join('');
+  requestAnimationFrame(()=>{
+    [...grid.children].forEach((c,i)=>{
+      c.style.animationDelay = (i*45)+'ms';
+      requestAnimationFrame(()=>c.classList.add('in'));
+    });
+  });
+}
+render();
+
+filterBar.addEventListener('click', e=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  filterBar.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  render(chip.dataset.tag);
+});
+</script>
+</body>
+</html>
