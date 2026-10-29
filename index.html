@@ -631,15 +631,29 @@ if (fine && !reduce) {
   /* floating screenshot preview on index rows */
   const pv = document.querySelector('.preview'), pf = pv.querySelector('img');
   const px = gsap.quickTo(pv, 'x', {duration:.7, ease:'expo.out'}), py = gsap.quickTo(pv, 'y', {duration:.7, ease:'expo.out'});
-  list.addEventListener('pointermove', e => { px(e.clientX + 24); py(e.clientY - 125); }, {passive:true});
-  list.addEventListener('pointerover', e => {
-    const row = e.target.closest('.row'); if (!row) return;
+  /* decide from what is actually under the cursor, so scrolling a row away (no mouse move) also hides it */
+  let lx = -1, ly = -1, shown = null;
+  function syncPreview() {
+    const el = lx < 0 ? null : document.elementFromPoint(lx, ly);
+    const row = el && el.closest('.row');
+    if (row === shown) return;
+    shown = row;
+    if (!row) { gsap.to(pv, {opacity:0, scale:.6, duration:.3, ease:'expo.out', overwrite:true}); return; }
     const live = row.dataset.live === '1';
     pv.classList.toggle('nolive', !live);
     if (live && pf.getAttribute('src') !== row.dataset.shot) pf.src = row.dataset.shot;
-    gsap.to(pv, {opacity:1, scale:1, duration:.5, ease:'expo.out'});
-  });
-  list.addEventListener('pointerleave', () => gsap.to(pv, {opacity:0, scale:.6, duration:.4, ease:'expo.out'}));
+    gsap.to(pv, {opacity:1, scale:1, duration:.5, ease:'expo.out', overwrite:true});
+  }
+  addEventListener('pointermove', e => {
+    lx = e.clientX; ly = e.clientY;
+    if (!shown) gsap.set(pv, {x:lx + 24, y:ly - 125}); // hidden: jump, don't glide in from the last spot
+    px(lx + 24); py(ly - 125);
+    syncPreview();
+  }, {passive:true});
+  addEventListener('scroll', syncPreview, {passive:true});
+  document.documentElement.addEventListener('pointerleave', () => { lx = -1; syncPreview(); });
+  addEventListener('blur', () => { lx = -1; syncPreview(); });
+  filters.addEventListener('click', () => requestAnimationFrame(syncPreview));
 }
 
 addEventListener('load', () => ScrollTrigger.refresh());
