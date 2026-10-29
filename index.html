@@ -41,20 +41,15 @@ a{color:inherit;text-decoration:none}
 .iri{background:var(--iri);-webkit-background-clip:text;background-clip:text;color:transparent}
 
 /* ── layers ── */
-#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.grain{position:fixed;inset:-50%;z-index:2;pointer-events:none;opacity:.06;
+#gl{position:fixed;top:0;left:0;width:100%;height:100vh;height:100lvh;z-index:0;pointer-events:none}
+.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1.2s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+}
+@media (pointer:coarse){.grain{display:none}}
 .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 40%,transparent 40%,rgba(6,6,8,.85) 100%)}
 main,footer,nav{position:relative;z-index:3}
 .wrap{max-width:1360px;margin:0 auto;padding:0 clamp(16px,4vw,56px)}
 
-/* ── preloader ── */
-#loader{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,4vw,48px)}
-#loader .top,#loader .bot{display:flex;justify-content:space-between;align-items:flex-end;color:var(--muted)}
-#loader .count{font-family:var(--sans);font-weight:300;font-size:clamp(80px,18vw,240px);line-height:.8;letter-spacing:-.05em;color:var(--text);font-variant-numeric:tabular-nums}
-#loader .bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--iri);transform-origin:left;transform:scaleX(0)}
 
 /* ── cursor ── */
 .cursor,.cursor-dot{position:fixed;top:0;left:0;z-index:90;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%)}
@@ -66,7 +61,7 @@ main,footer,nav{position:relative;z-index:3}
 @media (hover:none),(pointer:coarse){.cursor,.cursor-dot{display:none}}
 
 /* ── nav ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:22px 0;mix-blend-mode:difference}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:18px 0;background:linear-gradient(180deg,rgba(6,6,8,.75),rgba(6,6,8,0))}
 nav .wrap{display:flex;justify-content:space-between;align-items:center}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px}
 .brand b{display:inline-flex;width:30px;height:30px;border:1px solid var(--text);border-radius:8px;align-items:center;justify-content:center;font-weight:500}
@@ -96,8 +91,8 @@ h1 .serif{letter-spacing:-.02em;font-size:1.04em}
 @media(max-width:640px){.hero-foot{grid-template-columns:1fr}.scroll-hint{display:none}}
 
 /* ── marquee ── */
-.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;white-space:nowrap;background:rgba(6,6,8,.4);backdrop-filter:blur(6px)}
-.marquee-in{display:inline-flex;gap:48px;font-size:clamp(22px,3vw,40px);font-weight:300;letter-spacing:-.02em;will-change:transform}
+.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;white-space:nowrap;background:rgba(6,6,8,.55)}
+.marquee-in{display:inline-flex;gap:48px;padding-right:48px;font-size:clamp(22px,3vw,40px);font-weight:300;letter-spacing:-.02em;will-change:transform}
 .marquee-in span{display:inline-flex;align-items:center;gap:48px}
 .marquee-in span::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--iri)}
 
@@ -118,13 +113,12 @@ h2{font-weight:500;font-size:clamp(40px,7vw,110px);line-height:.92;letter-spacin
 .h-wrap{padding:0;overflow:hidden;min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative}
 .h-wrap .wrap{padding-top:clamp(80px,11vh,120px);margin-bottom:clamp(24px,4vh,48px);width:100%}
 .h-track{display:flex;gap:clamp(16px,2vw,28px);padding:0 clamp(16px,4vw,56px) clamp(56px,9vh,96px);width:max-content;will-change:transform}
-.f-card{width:min(76vw,720px,calc((100svh - 470px) * 1.6 + 28px));min-width:min(76vw,420px);flex-shrink:0;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(20,20,26,.85),rgba(10,10,14,.92));backdrop-filter:blur(14px);padding:14px;display:flex;flex-direction:column;transform-style:preserve-3d;transition:border-color .5s var(--ease);position:relative}
+.f-card{width:min(76vw,720px,calc((100svh - 470px) * 1.6 + 28px));min-width:min(76vw,420px);flex-shrink:0;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#14141a,#0a0a0e);padding:14px;display:flex;flex-direction:column;transform-style:preserve-3d;transition:border-color .5s var(--ease);position:relative}
 .f-card:hover{border-color:var(--line-2)}
 .f-card::before{content:'';position:absolute;inset:-1px;border-radius:24px;padding:1px;background:var(--iri);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .6s var(--ease);pointer-events:none}
 .f-card:hover::before{opacity:.7}
 .f-shot{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;background:#0a0a0e;border:1px solid var(--line)}
-.f-shot iframe{position:absolute;top:0;left:0;width:1280px;height:800px;border:0;transform-origin:0 0;pointer-events:none;opacity:0;transition:opacity .8s}
-.f-shot iframe.on{opacity:1}
+.f-shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .f-shot .glyph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 40%,rgba(157,140,255,.22),transparent 60%)}
 .f-shot .glyph svg{width:30%;height:auto;stroke:var(--text);opacity:.9}
 .f-shot .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,6,8,.7));pointer-events:none}
@@ -183,10 +177,10 @@ h2{font-weight:500;font-size:clamp(40px,7vw,110px);line-height:.92;letter-spacin
 .row.hidden{display:none}
 @media(max-width:900px){.row{grid-template-columns:40px 1fr 56px;gap:12px}.row .desc,.row .lang,.row .st{display:none}}
 .preview{position:fixed;top:0;left:0;z-index:40;width:400px;height:250px;border-radius:14px;overflow:hidden;pointer-events:none;background:#0a0a0e;border:1px solid var(--line-2);box-shadow:0 40px 80px -20px rgba(0,0,0,.8);opacity:0;transform:scale(.6);will-change:transform}
-.preview iframe{width:1280px;height:800px;border:0;transform:scale(.3125);transform-origin:0 0}
+.preview img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .preview .ph{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--muted);background:radial-gradient(circle,rgba(157,140,255,.2),transparent 70%)}
 .preview.nolive .ph{display:flex}
-.preview.nolive iframe{display:none}
+.preview.nolive img{display:none}
 @media (hover:none),(pointer:coarse){.preview{display:none}}
 
 /* ── cta / footer ── */
@@ -212,24 +206,17 @@ footer a:hover{color:var(--text)}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
   .manifesto .w{opacity:1}
-  #loader{display:none}
 }
 </style>
 </head>
 <body>
-
-<div id="loader" aria-hidden="true">
-  <div class="top mono"><span>rootdeyan</span><span>Sofia — BG</span></div>
-  <div class="bot"><span class="count" id="count">000</span><span class="mono">Loading the index</span></div>
-  <div class="bar" id="bar"></div>
-</div>
 
 <canvas id="gl" aria-hidden="true"></canvas>
 <div class="vignette"></div>
 <div class="grain"></div>
 <div class="cursor" aria-hidden="true"><span>VIEW</span></div>
 <div class="cursor-dot" aria-hidden="true"></div>
-<div class="preview" aria-hidden="true"><iframe tabindex="-1" title="Preview" loading="lazy"></iframe><div class="ph">No live demo — source only</div></div>
+<div class="preview" aria-hidden="true"><img alt="" decoding="async"><div class="ph">No live demo — source only</div></div>
 
 <nav>
   <div class="wrap">
@@ -321,7 +308,6 @@ footer a:hover{color:var(--text)}
 <script type="module">
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 /* ───────── data ───────── */
 const GH = 'https://github.com/rootdeyan/';
@@ -365,7 +351,7 @@ const track = document.getElementById('track');
 track.innerHTML = FEATURED.map((r, i) => {
   const p = P.find(x => x.r === r);
   const shot = p.live
-    ? `<iframe data-src="${url(p)}" title="${p.n} preview" tabindex="-1" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>`
+    ? `<img src="shots/${p.r}.webp" alt="${p.n} screenshot" width="800" height="500" loading="lazy" decoding="async">`
     : `<div class="glyph"><svg viewBox="0 0 48 48" fill="none" stroke-width="1.2"><rect x="10" y="21" width="28" height="20" rx="4"/><path d="M16 21v-6a8 8 0 0 1 16 0v6"/><circle cx="24" cy="31" r="2.5"/><path d="M24 33.5V36"/></svg></div>`;
   return `<a class="f-card" href="${url(p)}" target="_blank" rel="noopener" data-cursor="${p.live ? 'OPEN' : 'CODE'}">
     <div class="f-shot">${shot}<div class="shade"></div></div>
@@ -377,25 +363,9 @@ track.innerHTML = FEATURED.map((r, i) => {
     </div></a>`;
 }).join('');
 
-/* scale iframes to their frame */
-const fit = new ResizeObserver(es => es.forEach(e => {
-  const f = e.target.querySelector('iframe');
-  if (f) f.style.transform = `scale(${e.contentRect.width / 1280})`;
-}));
-document.querySelectorAll('.f-shot').forEach(s => fit.observe(s));
-/* load previews only when near the viewport */
-const lazy = new IntersectionObserver(es => es.forEach(e => {
-  if (!e.isIntersecting) return;
-  const f = e.target;
-  f.src = f.dataset.src;
-  f.addEventListener('load', () => f.classList.add('on'), {once:true});
-  lazy.unobserve(f);
-}), {rootMargin:'0px 100% 400px 100%'});
-document.querySelectorAll('.f-shot iframe').forEach(f => lazy.observe(f));
-
 /* index list + filters */
 const list = document.getElementById('list');
-list.innerHTML = P.map((p, i) => `<a class="row" href="${url(p)}" target="_blank" rel="noopener" data-tag="${p.t}" data-live="${p.live}" data-url="${url(p)}" data-cursor="${p.live ? 'OPEN' : 'CODE'}">
+list.innerHTML = P.map((p, i) => `<a class="row" href="${url(p)}" target="_blank" rel="noopener" data-tag="${p.t}" data-live="${p.live}" data-shot="shots/${p.r}.webp" data-cursor="${p.live ? 'OPEN' : 'CODE'}">
   <span class="num mono">${pad(i)}</span>
   <h4>${p.n}${p.isNew ? ' <sup class="mono iri" style="font-size:11px;vertical-align:top">NEW</sup>' : ''}</h4>
   <span class="desc muted">${p.d}</span>
@@ -418,6 +388,7 @@ filters.addEventListener('click', e => {
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ignoreMobileResize:true}); // don't recalc everything when the phone URL bar hides
 
 /* split hero text into chars */
 document.querySelectorAll('[data-split]').forEach(el => {
@@ -437,10 +408,14 @@ const man = document.getElementById('manifesto');
 /* ───────── three.js: liquid chrome blob + particle field ───────── */
 const S = {x:1.6, y:0, s:1, amp:.22, spin:0, ring:1};
 const I = {s:reduce ? 1 : .2, amp:reduce ? 0 : .9, spin:reduce ? 0 : -3}; // intro offsets, kept apart from scroll state
+/* device tier: phones, tablets and weak CPUs get a lighter scene */
+const coarse = matchMedia('(pointer:coarse)').matches;
+const low = coarse || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
 try {
   const canvas = document.getElementById('gl');
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:!low, alpha:true, powerPreference:'high-performance'});
+  let dpr = Math.min(devicePixelRatio, low ? 1.25 : 1.5);
+  renderer.setPixelRatio(dpr);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   const scene = new THREE.Scene();
@@ -448,18 +423,40 @@ try {
   camera.position.z = 9;
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+  pmrem.dispose();
 
   const group = new THREE.Group(); scene.add(group);
-  let geo = mergeVertices(new THREE.IcosahedronGeometry(1.5, 48));
-  const base = geo.attributes.position.array.slice();
+  const geo = new THREE.IcosahedronGeometry(1.5, low ? 18 : 36);
   const mat = new THREE.MeshPhysicalMaterial({
-    color:0x15151a, metalness:1, roughness:.12, clearcoat:1, clearcoatRoughness:.08,
+    color:0x15151a, metalness:1, roughness:.12, clearcoat:low ? 0 : 1, clearcoatRoughness:.08,
     iridescence:1, iridescenceIOR:1.9, iridescenceThicknessRange:[200, 900], envMapIntensity:1.6,
   });
+  /* liquid surface computed on the GPU: displace in the vertex shader and rebuild the normal from two neighbours */
+  const U = {uTime:{value:0}, uAmp:{value:.22}};
+  mat.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, U);
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', `#include <common>
+        uniform float uTime; uniform float uAmp;
+        float fn(vec3 p){ float t = uTime;
+          return sin(p.x*1.6+t)*cos(p.y*1.8+t*.8)*.6 + sin(p.y*2.4-t*1.1+p.z*1.3)*.3 + sin(p.z*3.1+p.x*1.2+t*1.4)*.18; }
+        vec3 dsp(vec3 p){ return p * (1. + fn(p) * uAmp); }`)
+      .replace('#include <beginnormal_vertex>', `
+        vec3 dP = dsp(position);
+        vec3 nrm = normalize(position);
+        vec3 tg = normalize(cross(nrm, abs(nrm.y) > .99 ? vec3(1.,0.,0.) : vec3(0.,1.,0.)));
+        vec3 bt = cross(nrm, tg);
+        float rad = length(position);
+        vec3 p1 = dsp(normalize(position + tg * .01) * rad);
+        vec3 p2 = dsp(normalize(position + bt * .01) * rad);
+        vec3 objectNormal = normalize(cross(p1 - dP, p2 - dP));
+        if (dot(objectNormal, nrm) < 0.) objectNormal = -objectNormal;`)
+      .replace('#include <begin_vertex>', 'vec3 transformed = dP;');
+  };
   const blob = new THREE.Mesh(geo, mat); group.add(blob);
 
-  /* orbit ring */
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.6, .006, 8, 240), new THREE.MeshBasicMaterial({color:0xf4f1ea, transparent:true, opacity:.25}));
+  /* orbit rings */
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.6, .006, 6, 160), new THREE.MeshBasicMaterial({color:0xf4f1ea, transparent:true, opacity:.25}));
   ring.rotation.x = 1.25; group.add(ring);
   const ring2 = ring.clone(); ring2.scale.setScalar(1.25); ring2.rotation.set(1.1, .4, 0); ring2.material = ring.material.clone(); ring2.material.opacity = .12; group.add(ring2);
 
@@ -469,7 +466,7 @@ try {
   });
 
   /* particles */
-  const N = 1800, pp = new Float32Array(N * 3);
+  const N = low ? 600 : 1400, pp = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) {
     const r = 4 + Math.random() * 10, th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
     pp.set([r * Math.sin(ph) * Math.cos(th), r * Math.sin(ph) * Math.sin(th), r * Math.cos(ph) - 4], i * 3);
@@ -478,39 +475,37 @@ try {
   const dots = new THREE.Points(pg, new THREE.PointsMaterial({size:.025, color:0xf4f1ea, transparent:true, opacity:.55, depthWrite:false}));
   scene.add(dots);
 
-  /* state driven by scroll (GSAP) and pointer */
+  /* pointer parallax (desktop only) */
   const M = {x:0, y:0, tx:0, ty:0};
-  addEventListener('pointermove', e => { M.tx = e.clientX / innerWidth - .5; M.ty = e.clientY / innerHeight - .5; });
+  if (!coarse) addEventListener('pointermove', e => { M.tx = e.clientX / innerWidth - .5; M.ty = e.clientY / innerHeight - .5; }, {passive:true});
 
+  /* resize only when the canvas size really changes (mobile URL bar only changes the small viewport) */
+  let lastW = 0, lastH = 0;
   function resize() {
-    const w = innerWidth, h = innerHeight;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (w === lastW && Math.abs(h - lastH) < 1) return;
+    lastW = w; lastH = h;
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
     S.mobile = w < 768;
   }
   addEventListener('resize', resize); resize();
 
-  /* cheap smooth 3D noise from layered sines — enough for a liquid surface */
-  const pos = geo.attributes.position;
-  function displace(t, amp) {
-    const a = pos.array;
-    for (let i = 0; i < a.length; i += 3) {
-      const x = base[i], y = base[i + 1], z = base[i + 2];
-      const n = Math.sin(x * 1.6 + t) * Math.cos(y * 1.8 + t * .8) * .6
-              + Math.sin(y * 2.4 - t * 1.1 + z * 1.3) * .3
-              + Math.sin(z * 3.1 + x * 1.2 + t * 1.4) * .18;
-      const k = 1 + n * amp;
-      a[i] = x * k; a[i + 1] = y * k; a[i + 2] = z * k;
-    }
-    pos.needsUpdate = true;
-    geo.computeVertexNormals();
+  /* adaptive quality: if frames run slow, lower the resolution step by step */
+  let acc = 0, n = 0;
+  function adapt(dt) {
+    acc += dt; n++;
+    if (n < 45) return;
+    const avg = acc / n; acc = 0; n = 0;
+    if (avg > 21 && dpr > .75) { dpr = Math.max(.75, dpr - .25); renderer.setPixelRatio(dpr); lastW = 0; resize(); }
   }
 
   const clock = new THREE.Clock();
-  function frame() {
+  function frame(time, dtMs) {
     const t = clock.getElapsedTime();
+    if (dtMs) adapt(dtMs);
     M.x += (M.tx - M.x) * .05; M.y += (M.ty - M.y) * .05;
-    displace(t * .55, S.amp + I.amp);
+    U.uTime.value = t * .55; U.uAmp.value = S.amp + I.amp;
     const mx = S.mobile ? 0 : S.x;
     group.position.x += (mx - group.position.x) * .08;
     group.position.y += ((S.mobile ? .9 : S.y) - group.position.y) * .08;
@@ -523,7 +518,7 @@ try {
     camera.position.x = M.x * .8; camera.position.y = -M.y * .5; camera.lookAt(0, 0, 0);
     renderer.render(scene, camera);
   }
-  if (reduce) { frame(); addEventListener('resize', frame); }
+  if (reduce) { frame(); addEventListener('resize', () => frame()); }
   else gsap.ticker.add(frame);
 } catch (err) {
   // no WebGL (old GPU, blocked context): keep the page fully usable with a CSS orb
@@ -532,22 +527,12 @@ try {
   document.body.classList.add('no-gl');
 }
 
-/* ───────── preloader ───────── */
-const count = document.getElementById('count'), bar = document.getElementById('bar');
-const intro = gsap.timeline({paused:true});
-intro
-  .to('#loader', {yPercent:-100, duration:1.1, ease:'expo.inOut'})
-  .from('h1 .ch', {yPercent:115, rotate:6, duration:1.3, stagger:.03, ease:'expo.out'}, '-=.45')
-  .to(I, {s:1, amp:0, spin:0, duration:2.2, ease:'expo.out'}, '<')
-  .from('[data-fade], .hero-meta, nav', {y:24, opacity:0, duration:1, stagger:.08, ease:'expo.out'}, '<.4');
-
-if (reduce) { document.getElementById('loader').remove(); }
-else {
-  const c = {v:0};
-  gsap.to(c, {v:100, duration:1.8, ease:'power3.inOut',
-    onUpdate:() => { count.textContent = String(Math.round(c.v)).padStart(3, '0'); bar.style.transform = `scaleX(${c.v / 100})`; },
-    onComplete:() => intro.play()});
-}
+/* ───────── intro (no loading screen) ───────── */
+if (!reduce) gsap.timeline({delay:.1})
+  .from('h1 .ch', {yPercent:115, rotate:6, duration:1.2, stagger:.03, ease:'expo.out'})
+  .to(I, {s:1, amp:0, spin:0, duration:2, ease:'expo.out'}, '<')
+  .from('[data-fade], .hero-meta, nav', {y:24, opacity:0, duration:.9, stagger:.08, ease:'expo.out'}, '<.3');
+else Object.assign(I, {s:1, amp:0, spin:0});
 
 /* ───────── smooth scroll ───────── */
 let lenis;
@@ -576,11 +561,9 @@ if (!reduce) {
 
   /* marquee: constant drift + scroll velocity boost */
   const mqTween = gsap.to('#marquee', {xPercent:-50, duration:40, ease:'none', repeat:-1});
-  ScrollTrigger.create({onUpdate:self => {
-    const v = gsap.utils.clamp(-6, 6, self.getVelocity() / 300);
-    gsap.to(mqTween, {timeScale:v || 1, duration:.3, overwrite:true});
-    gsap.to(mqTween, {timeScale:self.direction, duration:1.2, delay:.3});
-  }});
+  let boost = 0, dir = 1;
+  ScrollTrigger.create({onUpdate:self => { dir = self.direction; boost = gsap.utils.clamp(-5, 5, self.getVelocity() / 400); }});
+  gsap.ticker.add(() => { boost *= .9; mqTween.timeScale(dir + boost); });
 
   /* manifesto words light up with scroll */
   gsap.to('#manifesto .w', {opacity:1, stagger:.08, ease:'none', scrollTrigger:{trigger:'#manifesto', start:'top 80%', end:'bottom 45%', scrub:true}});
@@ -623,7 +606,7 @@ if (fine && !reduce) {
   const cur = document.querySelector('.cursor'), dot = document.querySelector('.cursor-dot'), label = cur.querySelector('span');
   const cx = gsap.quickTo(cur, 'x', {duration:.5, ease:'expo.out'}), cy = gsap.quickTo(cur, 'y', {duration:.5, ease:'expo.out'});
   const dx = gsap.quickTo(dot, 'x', {duration:.08}), dy = gsap.quickTo(dot, 'y', {duration:.08});
-  addEventListener('pointermove', e => { cx(e.clientX); cy(e.clientY); dx(e.clientX); dy(e.clientY); });
+  addEventListener('pointermove', e => { cx(e.clientX); cy(e.clientY); dx(e.clientX); dy(e.clientY); }, {passive:true});
   document.addEventListener('pointerover', e => {
     const t = e.target.closest('[data-cursor]');
     cur.classList.toggle('big', !!t); if (t) label.textContent = t.dataset.cursor;
@@ -631,7 +614,9 @@ if (fine && !reduce) {
 
   /* 3D tilt on featured cards */
   document.querySelectorAll('.f-card').forEach(card => {
-    const rx = gsap.quickTo(card, 'rotationX', {duration:.8, ease:'expo.out'}), ry = gsap.quickTo(card, 'rotationY', {duration:.8, ease:'expo.out'});
+    const shot = card.querySelector('.f-shot');
+    gsap.set(shot, {transformPerspective:900});
+    const rx = gsap.quickTo(shot, 'rotationX', {duration:.8, ease:'expo.out'}), ry = gsap.quickTo(shot, 'rotationY', {duration:.8, ease:'expo.out'});
     card.addEventListener('pointermove', e => { const r = card.getBoundingClientRect(); ry(((e.clientX - r.left) / r.width - .5) * 10); rx(-((e.clientY - r.top) / r.height - .5) * 10); });
     card.addEventListener('pointerleave', () => { rx(0); ry(0); });
   });
@@ -643,15 +628,15 @@ if (fine && !reduce) {
     el.addEventListener('pointerleave', () => { x(0); y(0); });
   });
 
-  /* floating live preview on index rows — one shared iframe */
-  const pv = document.querySelector('.preview'), pf = pv.querySelector('iframe');
+  /* floating screenshot preview on index rows */
+  const pv = document.querySelector('.preview'), pf = pv.querySelector('img');
   const px = gsap.quickTo(pv, 'x', {duration:.7, ease:'expo.out'}), py = gsap.quickTo(pv, 'y', {duration:.7, ease:'expo.out'});
-  list.addEventListener('pointermove', e => { px(e.clientX + 24); py(e.clientY - 125); });
+  list.addEventListener('pointermove', e => { px(e.clientX + 24); py(e.clientY - 125); }, {passive:true});
   list.addEventListener('pointerover', e => {
     const row = e.target.closest('.row'); if (!row) return;
     const live = row.dataset.live === '1';
     pv.classList.toggle('nolive', !live);
-    if (live && pf.dataset.cur !== row.dataset.url) { pf.dataset.cur = row.dataset.url; pf.src = row.dataset.url; }
+    if (live && pf.getAttribute('src') !== row.dataset.shot) pf.src = row.dataset.shot;
     gsap.to(pv, {opacity:1, scale:1, duration:.5, ease:'expo.out'});
   });
   list.addEventListener('pointerleave', () => gsap.to(pv, {opacity:0, scale:.6, duration:.4, ease:'expo.out'}));
