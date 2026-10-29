@@ -415,8 +415,8 @@ const coarse = matchMedia('(pointer:coarse)').matches;
 const low = coarse || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
 try {
   const canvas = document.getElementById('gl');
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:!low, alpha:true, powerPreference:'high-performance'});
-  let dpr = Math.min(devicePixelRatio, low ? 1.25 : 1.5);
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+  let dpr = Math.min(devicePixelRatio, 2);
   renderer.setPixelRatio(dpr);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -428,7 +428,7 @@ try {
   pmrem.dispose();
 
   const group = new THREE.Group(); scene.add(group);
-  const geo = new THREE.IcosahedronGeometry(1.5, low ? 18 : 36);
+  const geo = new THREE.IcosahedronGeometry(1.5, low ? 28 : 40);
   const mat = new THREE.MeshPhysicalMaterial({
     color:0x15151a, metalness:1, roughness:.12, clearcoat:low ? 0 : 1, clearcoatRoughness:.08,
     iridescence:1, iridescenceIOR:1.9, iridescenceThicknessRange:[200, 900], envMapIntensity:1.6,
@@ -494,12 +494,16 @@ try {
   addEventListener('resize', resize); resize();
 
   /* adaptive quality: if frames run slow, lower the resolution step by step */
-  let acc = 0, n = 0;
+  /* skip warm-up frames and tab-switch spikes; only step down after two slow windows in a row */
+  let acc = 0, n = 0, warm = 120, slow = 0;
   function adapt(dt) {
+    if (warm > 0) { warm--; return; }
+    if (dt > 100) return;
     acc += dt; n++;
-    if (n < 45) return;
+    if (n < 60) return;
     const avg = acc / n; acc = 0; n = 0;
-    if (avg > 21 && dpr > .75) { dpr = Math.max(.75, dpr - .25); renderer.setPixelRatio(dpr); lastW = 0; resize(); }
+    slow = avg > 24 ? slow + 1 : 0;
+    if (slow >= 2 && dpr > 1) { slow = 0; dpr = Math.max(1, dpr - .25); renderer.setPixelRatio(dpr); lastW = 0; resize(); }
   }
 
   const clock = new THREE.Clock();
