@@ -398,7 +398,6 @@ function ago(d) {
   const y = Math.floor(n / 365); return y + (y > 1 ? ' years' : ' year') + ' ago';
 }
 const fresh = d => Date.now() - new Date(d) < 30 * DAY;
-const byUpdated = [...P].sort((a, b) => b.u.localeCompare(a.u));
 
 /* preview box: the real page scaled down, or a poster when there is no live demo */
 function poster(p) {
@@ -425,7 +424,7 @@ grid.innerHTML = FEATURED.map(r => {
   return `<a class="card" href="${url(p)}" target="_blank" rel="noopener" data-rv>
     <div class="media" inert>${media(p)}</div>
     <div class="info"><h3>${esc(p.n)}${GO}</h3><p>${p.d}</p>
-      <div class="meta">${p.isNew ? '<span class="tag new">New</span>' : ''}<span class="tag">${ic(CAT[p.t][0])}${p.t}</span><span class="tag">${p.live ? ic('fa-globe') + 'Live' : ic('fa-code') + 'Source'}</span><span class="tag">${ic('fa-clock-rotate-left')}${ago(p.u)}</span></div></div></a>`;
+      <div class="meta">${p.isNew ? '<span class="tag new">New</span>' : ''}<span class="tag">${ic(CAT[p.t][0])}${p.t}</span><span class="tag">${p.live ? ic('fa-globe') + 'Live' : ic('fa-code') + 'Source'}</span><span class="tag">${ic('fa-clock-rotate-left')}<span data-ago="${p.r}">${ago(p.u)}</span></span></div></div></a>`;
 }).join('');
 grid.querySelectorAll('.media').forEach(el => fit.observe(el));
 
@@ -443,13 +442,41 @@ document.getElementById('logList').innerHTML = logHtml;
 
 /* index + filters */
 const list = document.getElementById('list');
-list.innerHTML = byUpdated.map((p, i) => `<a class="row" href="${url(p)}" target="_blank" rel="noopener" data-tag="${p.t}" data-r="${p.r}">
+let activeTag = 'all';
+const applyFilter = () => list.querySelectorAll('.row').forEach(r => r.classList.toggle('hidden', activeTag !== 'all' && r.dataset.tag !== activeTag));
+/* everything that depends on the update dates; runs again once GitHub answers */
+function renderDates() {
+  const sorted = [...P].sort((a, b) => b.u.localeCompare(a.u));
+  list.innerHTML = sorted.map((p, i) => `<a class="row" href="${url(p)}" target="_blank" rel="noopener" data-tag="${p.t}" data-r="${p.r}">
   <span class="num mono">${pad(i)}</span>
   <h4>${esc(p.n)}${p.isNew ? '<sup>NEW</sup>' : ''}</h4>
   <span class="d">${p.d}</span>
   <span class="s mono">${ic(CAT[p.t][0])}${p.t} · ${p.l}</span>
   <span class="u mono${fresh(p.u) ? ' fresh' : ''}">${p.live ? ic('fa-circle') : ic('fa-circle', 'fa-regular')}${ago(p.u)}<span class="sr">${p.live ? ', live demo' : ', source only'}</span></span>
   ${GO}</a>`).join('');
+  applyFilter();
+  grid.querySelectorAll('[data-ago]').forEach(el => el.textContent = ago(P.find(p => p.r === el.dataset.ago).u));
+  document.getElementById('lastShip').textContent = `${sorted[0].n} · ${ago(sorted[0].u)}`;
+}
+renderDates();
+
+/* latest push dates from GitHub; the dates typed above stay as the fallback */
+(async () => {
+  const KEY = 'ghPushed', TTL = 30 * 60e3;
+  let map = null;
+  try { const c = JSON.parse(localStorage.getItem(KEY)); if (c && Date.now() - c.t < TTL) map = c.map; } catch (e) {}
+  if (!map) {
+    try {
+      const res = await fetch('https://api.github.com/users/rootdeyan/repos?per_page=100', {headers:{Accept:'application/vnd.github+json'}});
+      if (!res.ok) return; // rate limit (60/hour per visitor) or outage: keep the fallback dates
+      map = Object.fromEntries((await res.json()).map(r => [r.name, r.pushed_at.slice(0, 10)]));
+      try { localStorage.setItem(KEY, JSON.stringify({t:Date.now(), map})); } catch (e) {}
+    } catch (e) { return; }
+  }
+  let changed = false;
+  P.forEach(p => { const d = map[p.r]; if (d && d > p.u) { p.u = d; changed = true; } });
+  if (changed) renderDates();
+})();
 const filters = document.getElementById('filters');
 const tags = ['all', ...new Set(P.map(p => p.t))];
 const count = t => t === 'all' ? P.length : P.filter(p => p.t === t).length;
@@ -457,14 +484,13 @@ filters.innerHTML = tags.map((t, i) => `<button class="chip" type="button" aria-
 filters.addEventListener('click', e => {
   const c = e.target.closest('.chip'); if (!c) return;
   filters.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === c));
-  list.querySelectorAll('.row').forEach(r => r.classList.toggle('hidden', c.dataset.tag !== 'all' && r.dataset.tag !== c.dataset.tag));
+  activeTag = c.dataset.tag; applyFilter();
 });
 
 /* hero facts */
 document.getElementById('nTools').textContent = P.length;
 document.getElementById('nLive').textContent = P.filter(p => p.live).length;
 document.getElementById('yr').textContent = yrNow;
-document.getElementById('lastShip').textContent = `${byUpdated[0].n} · ${ago(byUpdated[0].u)}`;
 const clockFmt = new Intl.DateTimeFormat('en-GB', {hour:'2-digit', minute:'2-digit', timeZone:'Europe/Sofia'});
 const clock = document.getElementById('clock');
 const tick = () => clock.textContent = clockFmt.format(new Date()) + ' in Sofia';
